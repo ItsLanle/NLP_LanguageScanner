@@ -1,12 +1,14 @@
 import streamlit as st
 from model import load_model, predict
 
-st.title("🧠 Inappropriate Comments Scanner")
+st.title("Inappropriate Comments Scanner")
+st.write("Detects harmful language including bullying, sarcasm, and harmful content.")
 
-st.write("Detects harmful language including bullying, sarcasm, and implicit bias.")
+@st.cache_resource
+def get_model():
+    return load_model()
 
-# Load model once
-model, tokenizer, labels = load_model()
+model, tokenizer, labels = get_model()
 
 user_input = st.text_area("Enter a comment:")
 
@@ -15,7 +17,11 @@ if st.button("Analyze"):
         st.warning("Please enter a comment.")
     else:
         prediction, confidence = predict(user_input, model, tokenizer, labels)
-        
+
         st.subheader("Result:")
-        st.write(f"**Category:** {prediction}")
-        st.write(f"**Confidence:** {confidence:.2f}")
+        if confidence < 0.6:
+            st.warning(f"**Category:** Uncertain (leaning {prediction})")
+            st.write("Low confidence — the comment may be ambiguous or subtly sarcastic.")
+        else:
+            st.write(f"**Category:** {prediction}")
+        st.write(f"**Confidence:** {confidence:.1%}")
