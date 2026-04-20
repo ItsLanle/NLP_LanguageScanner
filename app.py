@@ -3,17 +3,11 @@ from model import load_model, predict
 
 st.title("Inappropriate Comments Scanner")
 st.write("Detects harmful language including bullying, sarcasm, and harmful content.")
-st.title("Inappropriate Comments Scanner")
-st.write("Detects harmful language including bullying, sarcasm, and harmful content.")
 
 @st.cache_resource
 def get_model():
     return load_model()
-@st.cache_resource
-def get_model():
-    return load_model()
 
-model, tokenizer, labels = get_model()
 model, tokenizer, labels = get_model()
 
 user_input = st.text_area("Enter a comment:")
